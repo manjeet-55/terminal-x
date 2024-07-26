@@ -1,0 +1,89 @@
+/* src/components/Workspace.css */
+
+.workspace {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    height: 80vh;
+    background-color: #222;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    margin-top: 80px;
+}
+
+.workspace h3 {
+    margin: 20px;
+    color: #fff;
+}
+
+.workspace ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.workspace li {
+    padding: 10px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.workspace li.selected {
+    background-color: #555;
+}
+
+.workspace .workspace-controls,
+.workspace .file-controls {
+    padding: 20px;
+    background-color: #333;
+    border-top: 1px solid #444;
+}
+
+.workspace .workspace-controls input,
+.workspace .file-controls input,
+.workspace .file-controls textarea {
+    display: block;
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #444;
+    background-color: #222;
+    color: #fff;
+}
+
+.workspace .workspace-controls button,
+.workspace .file-controls button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.workspace .file-controls textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+.workspace .files-list {
+    padding: 20px;
+}
+
+.workspace .files-list li {
+    padding: 5px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.workspace .delete-button {
+    margin: 20px;
+    padding: 10px;
+    background-color: #b93333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
