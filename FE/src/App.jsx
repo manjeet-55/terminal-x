@@ -1,19 +1,26 @@
 import "./App.css";
 import TerminalComponent from "./components/Terminal/Terminal";
 import Navbar from "./components/Navbar/Navbar";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SignIn from "./components/SignIn";
+import Terminal from "./Pages/Terminal";
+import { ProtectedRoute } from "./Pages/ProtectedRoute";
+import SignUp from "./components/SignUp";
 // import UserProfile from "./components/UserProfile";
 // import Workspace from "./components/Workspace";
 
 function App() {
   return (
-    <>
-      <div className="w-screen h-screen flex flex-col">
-        <Navbar />
-        <div className="overflow-auto flex-1">
-          <TerminalComponent />
-        </div>
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<SignIn />}></Route>
+        <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="" element={<ProtectedRoute />}>
+          <Route path="/" element={<Terminal />}>
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
