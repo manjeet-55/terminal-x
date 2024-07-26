@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import Workspace from '../models/workspace.js';
 
-const secretKey = 'terminal-x-secret';
+const secretKey = process.env.SECRET_KEY;
 
 export const createWorkspace = async (req, res) => {
   const { token, name, commands } = req.body;

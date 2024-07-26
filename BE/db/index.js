@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-  const mongoUri = `mongodb+srv://manjeetagarwal123:manjeet123@cluster0.bj6qiwp.mongodb.net/terminalX?retryWrites=true&w=majority`;
+  const mongoUri = process.env.BACKEND_URL;
 
   const connectionOptions = {
     useNewUrlParser: true,

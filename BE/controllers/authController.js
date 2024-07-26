@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
-const secretKey = "terminal-x-secret";
+const secretKey = process.env.SECRET_KEY;
 
 export const register = async (req, res) => {
   const { email, password } = req.body;
