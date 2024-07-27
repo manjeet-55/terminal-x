@@ -12,26 +12,17 @@ const TerminalComponent = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [commandHistory, setCommandHistory] = useState([]);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [isProcessOpen, setIsProcessOpen] = useState(false);
-  const [processList, setProcessList] = useState([]);
+
   const [terminals, setTerminals] = useState([]);
   const [currentTerminal, setCurrentTerminal] = useState(null);
+  
   const [queuedCommands, setQueuedCommands] = useState([]);
-
   const socketRefs = useRef([]);
   const terminalRefs = useRef([]);
   const genAI = new GoogleGenerativeAI(
     "AIzaSyA39ik2y8b7EePKyUhiseX7EavMMMaNrg0"
   );
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-  useEffect(() => {
-    const savedCommandHistory =
-      JSON.parse(localStorage.getItem("commandHistory")) || [];
-    setCommandHistory(savedCommandHistory);
-  }, []);
 
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
@@ -130,26 +121,6 @@ const TerminalComponent = () => {
   };
   
   
-
-
-
-  const sendToSocket = (message) => {
-    if (currentTerminal !== null) {
-      const { socket } = terminals[currentTerminal];
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        // console.log(message)
-        socket.send(message); // Send message with terminalId
-      } else {
-        console.error("WebSocket is not open. Message not sent:", message);
-        queueCommand(message, currentTerminal); // Queue the command if the socket is not open
-      }
-    }
-  };
-  
-  
-
-
-
   const queueCommand = (command, terminalId) => {
     setQueuedCommands((prev) => [...prev, { command, terminalId }]);
   };
@@ -173,50 +144,30 @@ const TerminalComponent = () => {
     });
   };
 
-  const toggleHistoryPopup = () => {
-    setIsHistoryOpen((prev) => !prev);
-  };
 
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
-  };
-
-  const filteredCommandHistory = commandHistory.filter((entry) => {
-    if (!selectedDate) return true;
-    const entryDate = new Date(entry.timestamp);
-    const selected = new Date(selectedDate);
-    return (
-      entryDate.getFullYear() === selected.getFullYear() &&
-      entryDate.getMonth() === selected.getMonth() &&
-      entryDate.getDate() === selected.getDate()
-    );
-  });
-
-  const clearHistory = () => {
-    localStorage.removeItem("commandHistory");
-    setCommandHistory([]);
-  };
-
-  const fetchProcesses = async () => {
-    try {
-      const response = await fetch("/api/processes");
-      const processes = await response.json();
-      setProcessList(processes);
-    } catch (error) {
-      console.error("Error fetching processes:", error);
+  const sendToSocket = (message) => {
+    if (currentTerminal !== null) {
+      const { socket } = terminals[currentTerminal];
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        // console.log(message)
+        socket.send(message); // Send message with terminalId
+      } else {
+        console.error("WebSocket is not open. Message not sent:", message);
+        queueCommand(message, currentTerminal); // Queue the command if the socket is not open
+      }
     }
   };
+  
+  
 
-  const toggleProcessPopup = async () => {
-    setIsProcessOpen((prev) => !prev);
-    if (!isProcessOpen) {
-      await fetchProcesses();
-    }
+
+
+  
+
+  const handleCopyToClipboard = (value) => {
+    navigator.clipboard.writeText(value);
   };
 
-  const clearProcessList = () => {
-    setProcessList([]);
-  };
 
   const switchTerminal = (index) => {
     setCurrentTerminal(index);
@@ -243,7 +194,7 @@ const TerminalComponent = () => {
                 Send
               </button>
               <button
-                className="mt-4 block px-4 py-2 rounded-lg bg-red-400 text-white hover:bg-red-500 focus:outline-none"
+                className="mt-4 block px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 focus:outline-none"
                 onClick={clearChat}
               >
                 Clear Chat
@@ -282,20 +233,7 @@ const TerminalComponent = () => {
             ></div>
           ))}
           <InputBox onSend={handleEnter} />
-          <div className="flex flex-row gap-10">
-            <button
-              className="mt-4 block px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500 focus:outline-none"
-              onClick={toggleHistoryPopup}
-            >
-              History
-            </button>
-            <button
-              className="mt-4 block px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500 focus:outline-none"
-              onClick={toggleProcessPopup}
-            >
-              Process
-            </button>
-          </div>
+         
         </div>
         <div className="w-[30%] bg-[#1f1514]">
           <Workspace />
@@ -303,107 +241,7 @@ const TerminalComponent = () => {
       </div>
 
       {/* History Popup */}
-      {isHistoryOpen && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg max-w-2xl w-full">
-            <h2 className="text-xl font-bold mb-4">Command History</h2>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={handleDateChange}
-              className="mb-4 p-2 border border-gray-300 rounded-lg w-full"
-            />
-            <div className="max-h-60 overflow-y-auto">
-              {filteredCommandHistory.length > 0 ? (
-                filteredCommandHistory.map((entry, index) => (
-                  <div
-                    key={index}
-                    className="p-2 bg-gray-100 rounded-lg shadow-sm"
-                  >
-                    <p className="text-gray-700">{entry.command}</p>
-                    <p className="text-gray-500 text-sm">
-                      {new Date(entry.timestamp).toLocaleString()}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <div className="text-gray-500">
-                  No commands for selected date
-                </div>
-              )}
-            </div>
-            <button
-              className="mt-4 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 focus:outline-none"
-              onClick={clearHistory}
-            >
-              Clear History
-            </button>
-            <button
-              className="mt-4 px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
-              onClick={toggleHistoryPopup}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Process Popup */}
-      {isProcessOpen && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg max-w-2xl w-full">
-            <h2 className="text-xl font-bold mb-4">Running Processes</h2>
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Process ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Port
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Details
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {processList.map((process, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {process.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {process.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {process.port}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {process.details}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <button
-              className="mt-4 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 focus:outline-none"
-              onClick={clearProcessList}
-            >
-              Clear Processes
-            </button>
-            <button
-              className="mt-4 px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
-              onClick={toggleProcessPopup}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+     
     </div>
   );
 };

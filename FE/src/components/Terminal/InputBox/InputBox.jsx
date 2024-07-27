@@ -79,7 +79,7 @@ const InputBox = ({ onSend, currentTerminal }) => {
   };
 
   return (
-    <div className="w-[66%] rounded-xl mt-3 bg-black/90 p-[10px] px-5 pr-8 flex justify-between items-center">
+    <div className="w-[100%] rounded-md bg-black/90 p-[10px] px-5 pr-8 flex justify-between items-center">
       <input
         type="text"
         ref={inputRef}

@@ -16,11 +16,11 @@
 }
 
 .xterm .xterm-screen {
-  height: 500px !important;
+  height: 600px !important;
 }
 
 .xterm-rows{
-  height: 100%;
+  height: 100%
 }
 .xterm-dim {
   opacity: 0.5;
