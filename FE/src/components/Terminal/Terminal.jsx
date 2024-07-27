@@ -88,7 +88,7 @@ const TerminalComponent = () => {
   };
 
   useEffect(() => {
-    const term = new Terminal({ cursorBlink: true , });
+    const term = new Terminal({ cursorBlink: true , cursorStyle: "underline"} , { fontFamily: "monospace" });
     term.open(document.getElementById("terminal"));
     terminalRef.current = term;
 
@@ -164,12 +164,20 @@ const TerminalComponent = () => {
         <div className="flex flex-col items-center w-[100%] ml-10 pl-4 pt-4 ">
           <div id="terminal" className="w-[90%] rounded-xl"></div>
           <InputBox onEnter={handleEnter} />
+        <div className="flex flex-row gap-10">
+          <button className="mt-4 block px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500 focus:outline-none">Logs</button> 
+        <button className="mt-4 block px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500 focus:outline-none">History</button>  
+        <button className="mt-4 block px-4 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-500 focus:outline-none">Process</button>  
+
         </div>
+ 
+                </div>
         <div className="w-[30%] bg-[#1f1514]">
           <Workspace />
         </div>
       </div>
     </div>
+    
   );
 };
 
