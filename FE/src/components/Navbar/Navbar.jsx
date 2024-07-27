@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <div className="w-screen flex items-center justify-center p-4 bg-red-500">
       {/* <img src={logo} style={{width: "60px", height: "auto"}} /> */}
-      <p className='w-full flex justify-center text-xl font-semibold font-inter text-white'>Web Terminal</p>
+      <p className='w-full flex justify-center text-xl font-bold font-inter text-white'>Web Terminal</p>
       <AccountMenu />
     </div>
   );

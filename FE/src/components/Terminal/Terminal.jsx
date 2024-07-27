@@ -141,43 +141,46 @@ const TerminalComponent = () => {
 
   return (
     <div className="h-full w-full">
-      <div className="h-full flex w-full">
-        <div className="flex flex-col w-full">
-          <div id="terminal" className="w-[100%]"></div>
-          <InputBox onEnter={handleEnter} />
-        </div>
-        <div className="w-[30%] bg-[#1f1514]">
-          <Workspace />
-        </div>
-      </div>
-
-      <div>
+  <div className="h-full flex w-full">
+    <div className="w-[30%] flex flex-col bg-blue-100 m-2 rounded-xl p-2">
+      <div className="m-2 ">
         <input
           type="text"
-          className="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-grow px-4 w-full py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Type your message..."
           value={userInput}
           onChange={handleUserInput}
         />
+        <div className="flex flex-row gap-3">
         <button
-          className="px-4 py-2 ml-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
+          className="px-3 mt-4 ml-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
           onClick={sendMessage}
           disabled={isLoading}
         >
           Send
         </button>
         <button
-          className="mt-4 block px-4 py-2 rounded-lg bg-gray-400 text-white hover:bg-gray-500 focus:outline-none"
+          className="mt-4 block px-4 py-2 rounded-lg bg-red-400 text-white hover:bg-red-500 focus:outline-none"
           onClick={clearChat}
         >
           Clear Chat
         </button>
-
-        <div>
-          <ChatHistory chatHistory={chatHistory} />
         </div>
       </div>
+      <div className="m-4 p-2">
+        <ChatHistory chatHistory={chatHistory} />
+      </div>
     </div>
+    <div className="flex flex-col items-center w-[100%]  ml-10 pl-4 pt-4 ">
+      <div id="terminal" className="w-[90%] rounded-xl slelct-none"></div>
+      <InputBox onEnter={handleEnter} />
+    </div>
+    <div className="w-[30%] bg-[#1f1514]">
+      <Workspace />
+    </div>
+  </div>
+</div>
+
   );
 };
 

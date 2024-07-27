@@ -79,12 +79,12 @@ const InputBox = ({ onEnter }) => {
   };
 
   return (
-    <div className="w-full bg-black/90  p-[18px] px-5 pr-8 flex justify-between items-center">
+    <div className="w-[92%] rounded-sm mt-3 bg-black/90  p-[10px] px-5 pr-8 flex justify-between items-center">
       <input
         type="text"
         ref={inputRef}
         placeholder="Enter command and press Enter"
-        className='bg-transparent w-[100%] outline-none text-white/80 placeholder:text-white/70 break-all'
+        className='bg-gray-800 rounded-xl mr-2  p-[8px] w-[100%] outline-none text-white/80 placeholder:text-white/70 break-all'
       />
       <button
         onClick={() => {
@@ -94,7 +94,7 @@ const InputBox = ({ onEnter }) => {
             startListening();
           }
         }}
-        className={"text-white/90"}
+        className={"text-white/90 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg focus:outline-none"}
       >
         {isListening ? 'Stop' : 'Mic'}
       </button>
