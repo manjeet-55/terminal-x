@@ -1,58 +1,63 @@
-.xterm-screen{
-    height: 600px !important;
 
+.terminal {
+  padding: 10px;
 }
-
 .xterm .xterm-viewport {
-    background-color: #000 !important;
-    overflow-y: scroll !important;
-    cursor: default !important;
-    position: absolute !important;
+  height: 100%;
+  cursor: default !important;
+  /* position: absolute !important;
     right: 0 !important;
     left: 0 !important;
     top: 0 !important;
-    bottom: 0 !important;
-    margin: -10px !important;
-    border-radius: 5px !important;
+    bottom: 0 !important; */
+  /* margin: -10px !important; */
+  border-radius: 5px !important;
+  width: 100%;
+}
 
-  }
-  
+.xterm .xterm-screen {
+  height: 500px !important;
+}
+
+.xterm-rows{
+  height: 100%;
+}
 .xterm-dim {
-    opacity: 0.5;
-  }
-  
-  .xterm .xterm-dim {
-    opacity: 0.5 !important;
-  }
-  
-  .xterm-bold {
-    font-weight: bold !important;
-  }
-  
-  .xterm .xterm-bold {
-    font-weight: bold !important;
-  }
-  
-  .xterm-dim.xterm-bold {
-    opacity: 0.5;
-    font-weight: bold;
-  }
-  
-  .xterm .xterm-dim.xterm-bold {
-    opacity: 0.5 !important;
-    font-weight: bold !important;
-  }
-  
-  /* .xterm span:not(.xterm-bold) {
+  opacity: 0.5;
+}
+
+.xterm .xterm-dim {
+  opacity: 0.5 !important;
+}
+
+.xterm-bold {
+  font-weight: bold !important;
+}
+
+.xterm .xterm-bold {
+  font-weight: bold !important;
+}
+
+.xterm-dim.xterm-bold {
+  opacity: 0.5;
+  font-weight: bold;
+}
+
+.xterm .xterm-dim.xterm-bold {
+  opacity: 0.5 !important;
+  font-weight: bold !important;
+}
+
+/* .xterm span:not(.xterm-bold) {
     font-weight: 600; 
     font-size: 18px !important;
   }
    */
-  .xterm .xterm-rows {
-    font-family: 'Courier New', monospace;
-  }
+.xterm .xterm-rows {
+  font-family: "Courier New", monospace;
+}
 
-  /* .xterm-dom-renderer-owner-2 span.xterm-bold {
+/* .xterm-dom-renderer-owner-2 span.xterm-bold {
     font-weight: bold;
     font-size: 18px;
   } */

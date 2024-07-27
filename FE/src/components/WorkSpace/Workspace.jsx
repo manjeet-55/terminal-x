@@ -71,7 +71,7 @@ export default function RightSidebar() {
   };
 
   return (
-    <div className="w-full h-full border-l-4 border-white p-4 overflow-y-auto bg-gray-800 text-white">
+    <div className="w-full h-full border-l-4 border-white p-4 overflow-y-auto bg-slate-700 text-white border-t border-t-gray-400">
       <div className="mb-4 flex items-center gap-2">
         <input
           type="text"
@@ -82,9 +82,9 @@ export default function RightSidebar() {
         />
         <button
           onClick={handleAddWorkspace}
-          className="p-1 text-white bg-blue-500 rounded hover:bg-blue-600"
+          className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 rouned-lg"
         >
-          Add Workspace
+          Add
         </button>
       </div>
 
@@ -94,7 +94,7 @@ export default function RightSidebar() {
           {/* Workspace Header */}
           <button
             onClick={() => handleWorkspaceClick(index)}
-            className="w-full flex items-center justify-between p-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition"
+            className="w-full flex items-center justify-between p-2 bg-gray-900 text-white rounded transition text-lg"
           >
             <span>{workspace.name}</span>
             <div className="flex items-center gap-2">
@@ -114,10 +114,10 @@ export default function RightSidebar() {
 
           {/* Workspace Content */}
           {openWorkspace === index && (
-            <div className="mt-2 pl-4">
+            <div className="">
               {/* Add Command Section */}
               <div className="flex items-center w-full justify-between pr-2 border-b border-white/60 mb-2">
-                <div className="flex flex-col py-2 gap-y-1 w-[80%]">
+                <div className="flex flex-col py-2 gap-y-2 w-[80%]">
                   <input
                     type="text"
                     placeholder="Enter new Command Key"
@@ -139,7 +139,7 @@ export default function RightSidebar() {
                 </div>
                 <button
                   onClick={() => handleAddCommandInWorkSpace(index)}
-                  className="p-2 text-white bg-green-500 border border-white/60 rounded-lg hover:bg-green-600 flex items-center justify-center"
+                  className="p-2 text-white border border-white/60 rounded-lg hover:bg-green-700 flex items-center justify-center"
                 >
                   <AddIcon />
                 </button>

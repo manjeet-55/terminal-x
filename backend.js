@@ -17,7 +17,7 @@ wss.on('connection', function(ws) {
     var ptyProcess = pty.spawn(shell, [], {
         name: 'xterm-color',
         cols: 120,
-        rows: 40,
+        rows: 100,
         cwd: process.env.HOME,
         env: process.env
     });

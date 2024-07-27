@@ -7,11 +7,11 @@ import AccountMenu from './AccountMenu/AccountMenu';
 
 const Navbar = () => {
   return (
-    <div className="w-screen flex items-center justify-center p-4 bg-red-500">
+    <div className="w-screen flex items-center justify-center p-4 bg-slate-600 mb-0">
       
       {/* <img src={logo} style={{width: "60px", height: "auto"}} /> */}
       <p className='w-full flex justify-center text-xl font-bold font-inter text-white'>Web Terminal</p>
-      <button className='p-2 m-2 bg-blue-500 rounded-xl text-white '> Store</button>
+      <button className='p-2 m-2 bg-blue-500 rounded-lg text-white '> Store</button>
 
       <AccountMenu />
     </div>
