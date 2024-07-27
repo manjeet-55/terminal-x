@@ -72,7 +72,7 @@ export default function RightSidebar() {
   };
 
   return (
-    <div className="w-full h-full border-l-4 border-white overflow-y-auto bg-slate-700 text-white border-t border-t-gray-400 flex flex-col">
+    <div className="w-full h-full border-l-[1px] border-white overflow-y-auto bg-slate-700 text-white border-t border-t-gray-400 flex flex-col">
       <div className="flex-1 p-4">
         <div className="mb-4 flex items-center gap-2">
           <input

@@ -176,7 +176,7 @@ const TerminalComponent = () => {
   return (
     <div className="h-full w-full">
       <div className="h-full flex w-full">
-        <div className="w-[30%] flex flex-col bg-slate-600 border-t border-t-gray-400 p-2">
+        <div className="w-[30%] flex flex-col bg-slate-600 border-t border-t-gray-400 p-2 border-r-[1px] border-white">
           <div className="m-2">
             <input
               type="text"
@@ -185,9 +185,9 @@ const TerminalComponent = () => {
               value={userInput}
               onChange={handleUserInput}
             />
-            <div className="flex flex-row gap-3">
+            <div className="flex flex-row gap-3 w-full">
               <button
-                className="px-3 mt-4 ml-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
+                className="px-3 mt-4 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none w-[45%]"
                 onClick={sendMessage}
                 disabled={isLoading}
               >
