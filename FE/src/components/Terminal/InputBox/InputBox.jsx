@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './InputBox.css'; // Use a separate CSS file for styling
 
-const InputBox = ({ onEnter }) => {
+const InputBox = ({ onSend, currentTerminal }) => {
   const inputRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef(null);
@@ -49,10 +49,10 @@ const InputBox = ({ onEnter }) => {
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
-        if (onEnter) {
-          onEnter(inputRef.current.value);
+        if (onSend) {
+          onSend(inputRef.current.value, currentTerminal);
+          inputRef.current.value = ''; // Clear input after sending
         }
-        inputRef.current.value = '';
       }
     };
 
@@ -62,7 +62,7 @@ const InputBox = ({ onEnter }) => {
     return () => {
       inputBox.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onEnter]);
+  }, [onSend, currentTerminal]);
 
   const startListening = () => {
     if (recognitionRef.current) {
@@ -79,12 +79,13 @@ const InputBox = ({ onEnter }) => {
   };
 
   return (
-    <div className="w-[92%] rounded-sm mt-3 bg-black/90  p-[10px] px-5 pr-8 flex justify-between items-center">
+    <div className="w-[66%] rounded-xl mt-3 bg-black/90 p-[10px] px-5 pr-8 flex justify-between items-center">
       <input
         type="text"
         ref={inputRef}
         placeholder="Enter command and press Enter"
-        className='bg-gray-800 rounded-xl mr-2  p-[8px] w-[100%] outline-none text-white/80 placeholder:text-white/70 break-all'
+        className="bg-gray-800 rounded-xl mr-2 p-[8px] w-[100%] outline-none text-white/80 placeholder:text-white/70 break-all"
+        aria-label="Command input box"
       />
       <button
         onClick={() => {
@@ -94,7 +95,7 @@ const InputBox = ({ onEnter }) => {
             startListening();
           }
         }}
-        className={"text-white/90 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg focus:outline-none"}
+        className={`text-white/90 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg focus:outline-none ${isListening ? 'bg-red-600' : ''}`}
       >
         {isListening ? 'Stop' : 'Mic'}
       </button>
