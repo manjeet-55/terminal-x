@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import AddIcon from "@mui/icons-material/Add";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Divider } from "@mui/material";
+import { useWorkSpace } from "./useWorkSpace";
 
 const initialWorkspaces = [
   { name: "Workspace 1", commands: [{ key: "cmd1", value: "Command 1" }] },
@@ -11,46 +12,57 @@ const initialWorkspaces = [
 ];
 
 export default function RightSidebar() {
+  const {
+    workSpacesData,
+    handleCreateWorkspace,
+    handleAddCommand,
+    handleDeleteWorkspace,
+  } = useWorkSpace();
   const [openWorkspace, setOpenWorkspace] = useState(null);
-  const [workspaces, setWorkspaces] = useState(initialWorkspaces);
+  const [workspaces, setWorkspaces] = useState([]);
   const [newWorkspaceName, setNewWorkspaceName] = useState("");
   const [newCommand, setNewCommand] = useState({ key: "", value: "" });
 
   const handleWorkspaceClick = (index) => {
     setOpenWorkspace(openWorkspace === index ? null : index);
   };
+  console.log("workSpacesData", workSpacesData);
+
+  useEffect(() => {
+    if (workSpacesData?.data?.workspaces) {
+      setWorkspaces(workSpacesData?.data?.workspaces);
+    }
+  }, [workSpacesData]);
 
   const handleAddWorkspace = () => {
     if (newWorkspaceName.trim() === "") return;
 
-    const updatedWorkspaces = [
-      ...workspaces,
-      { name: newWorkspaceName, commands: [] },
-    ];
-    setWorkspaces(updatedWorkspaces);
+    handleCreateWorkspace.mutate({ name: newWorkspaceName, commands: [] });
     setNewWorkspaceName("");
   };
 
-  const handleDeleteWorkspace = (index) => {
-    const updatedWorkspaces = workspaces.filter((_, i) => i !== index);
-    setWorkspaces(updatedWorkspaces);
-    if (openWorkspace === index) {
-      setOpenWorkspace(null);
-    }
+  const handleDeleteWorkspaceAction = (index) => {
+    handleDeleteWorkspace.mutate(workspaces[index]._id);
   };
 
-  const handleAddCommand = (index) => {
+  const handleAddCommandInWorkSpace = (index) => {
     if (newCommand.key.trim() === "" || newCommand.value.trim() === "") return;
 
-    const updatedWorkspaces = [...workspaces];
-    updatedWorkspaces[index].commands.push(newCommand);
-    setWorkspaces(updatedWorkspaces);
+    handleAddCommand.mutate({
+      workspaceId: workspaces[index]._id,
+      command: {
+        key: newCommand.key,
+        value: newCommand.value,
+      },
+    });
     setNewCommand({ key: "", value: "" });
   };
 
   const handleDeleteCommand = (workspaceIndex, commandIndex) => {
     const updatedWorkspaces = [...workspaces];
-    updatedWorkspaces[workspaceIndex].commands = updatedWorkspaces[workspaceIndex].commands.filter((_, i) => i !== commandIndex);
+    updatedWorkspaces[workspaceIndex].commands = updatedWorkspaces[
+      workspaceIndex
+    ].commands.filter((_, i) => i !== commandIndex);
     setWorkspaces(updatedWorkspaces);
   };
 
@@ -60,7 +72,6 @@ export default function RightSidebar() {
 
   return (
     <div className="w-full h-full border-l-4 border-white p-4 overflow-y-auto bg-gray-800 text-white">
-      {/* Add Workspace Section */}
       <div className="mb-4 flex items-center gap-2">
         <input
           type="text"
@@ -78,7 +89,7 @@ export default function RightSidebar() {
       </div>
 
       {/* List of Workspaces */}
-      { workspaces.map((workspace, index) => (
+      {workspaces.map((workspace, index) => (
         <div key={index} className="mb-4">
           {/* Workspace Header */}
           <button
@@ -88,7 +99,7 @@ export default function RightSidebar() {
             <span>{workspace.name}</span>
             <div className="flex items-center gap-2">
               <button
-                onClick={() => handleDeleteWorkspace(index)}
+                onClick={() => handleDeleteWorkspaceAction(index)}
                 className="text-red-500 hover:text-red-400"
               >
                 <DeleteIcon />
@@ -127,7 +138,7 @@ export default function RightSidebar() {
                   />
                 </div>
                 <button
-                  onClick={() => handleAddCommand(index)}
+                  onClick={() => handleAddCommandInWorkSpace(index)}
                   className="p-2 text-white bg-green-500 border border-white/60 rounded-lg hover:bg-green-600 flex items-center justify-center"
                 >
                   <AddIcon />
