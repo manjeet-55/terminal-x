@@ -22,7 +22,7 @@ function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const userEmail = localStorage.getItem("x-email").toString();
+  const userEmail = localStorage.getItem("x-email") || "";
   console.log("userEmail", userEmail);
   return (
     <React.Fragment>

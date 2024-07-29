@@ -14,7 +14,7 @@ export const ApiServices = () => {
       };
 
       if (authorization) {
-        const token = localStorage.getItem("x-token");
+        const token = localStorage.getItem("x-token") || "";
         if (token) {
           headers.token = token;
         } else {
@@ -39,7 +39,7 @@ export const ApiServices = () => {
       };
 
       if (authorization) {
-        const token = localStorage.getItem("x-token");
+        const token = localStorage.getItem("x-token") || "";
         if (token) {
           headers.token = token;
         } else {
@@ -64,7 +64,7 @@ export const ApiServices = () => {
       };
 
       if (authorization) {
-        const token = localStorage.getItem("x-token");
+        const token = localStorage.getItem("x-token") ||"";
         if (token) {
           headers.token = token;
         } else {
