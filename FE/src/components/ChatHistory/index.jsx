@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm';
 
 const ChatHistory = ({ chatHistory }) => {
   return (
-    <div className="h-[calc(100vh-240px)] overflow-y-auto bg-blue-100 p-2 rounded-lg">
+    <div className="h-[calc(100vh-240px)] overflow-y-auto bg-transparent p-2 rounded-lg">
       {chatHistory.map((entry, index) => (
         <div
           key={index}

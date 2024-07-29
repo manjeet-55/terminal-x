@@ -11,7 +11,9 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
 function AccountMenu() {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -21,7 +23,7 @@ function AccountMenu() {
     setAnchorEl(null);
   };
   const userEmail = localStorage.getItem("x-email").toString();
-  console.log("userEmail",userEmail)
+  console.log("userEmail", userEmail);
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -29,7 +31,7 @@ function AccountMenu() {
           <IconButton
             onClick={handleClick}
             size="small"
-            sx={{  }}
+            sx={{}}
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
@@ -103,7 +105,11 @@ function AccountMenu() {
           Settings
         </MenuItem> */}
         <MenuItem onClick={handleClose}>
-          <ListItemIcon>
+          <ListItemIcon
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
