@@ -1,10 +1,11 @@
 import express from "express";
-import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes.js";
 import workspaceRoutes from "./routes/workspaceRoutes.js";
 import connectDB from "./db/index.js";
 import dotenv from "dotenv";
 import cors from "cors";
+import authMiddleware from "./middleware/authMiddleware.js";
+import errorMiddleware from "./middleware/errorMiddleware.js";
 const app = express();
 app.use(express.json());
 
@@ -12,10 +13,12 @@ dotenv.config({});
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Server is running");
+  res.send("Welcome to termiAI!");
 });
-app.use("/api", authRoutes);
+app.use("/api/auth", authRoutes);
+app.use(authMiddleware);
 app.use("/api", workspaceRoutes);
+app.use(errorMiddleware);
 connectDB()
   .then(() => {
     app.listen(process.env.PORT || 8000, () => {

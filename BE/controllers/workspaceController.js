@@ -1,70 +1,88 @@
-import jwt from "jsonwebtoken";
-import Workspace from "../models/workspace.js";
+import {
+  createWorkspace as createWorkspaceService,
+  getWorkspaces as getWorkspacesService,
+  deleteWorkspace as deleteWorkspaceService,
+  addCommandToWorkspace as addCommandToWorkspaceService,
+} from "../services/workspaceService.js";
+import responseGenerators from "../utils/helper.js";
+import { StatusCodes } from "http-status-codes";
 
-const secretKey = process.env.SECRET_KEY || "terminal-x-secret";
-
-export const createWorkspace = async (req, res) => {
-  const { token } = req.headers;
+export const createWorkspace = async (req, res, next) => {
   const { name, commands } = req.body;
+  const userId = req.user.id;
+
   try {
-    const decoded = jwt.verify(token, secretKey);
-    const newWorkspace = new Workspace({ userId: decoded.id, name, commands });
-    await newWorkspace.save();
-    res.json({ success: true });
+    const workspace = await createWorkspaceService(userId, name, commands);
+    res
+      .status(StatusCodes.CREATED)
+      .json(
+        responseGenerators(
+          workspace,
+          StatusCodes.CREATED,
+          "Workspace created successfully",
+          1
+        )
+      );
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    next(err);
   }
 };
 
-export const getWorkspaces = async (req, res) => {
-  const { token } = req.headers;
+export const getWorkspaces = async (req, res, next) => {
+  const userId = req.user.id;
+
   try {
-    const decoded = jwt.verify(token, secretKey);
-    const workspaces = await Workspace.find({ userId: decoded.id });
-    res.json({ success: true, workspaces });
+    const workspaces = await getWorkspacesService(userId);
+    res
+      .status(StatusCodes.OK)
+      .json(
+        responseGenerators(
+          workspaces,
+          StatusCodes.OK,
+          "Workspaces retrieved successfully",
+          1
+        )
+      );
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    next(err);
   }
 };
 
-export const deleteWorkspace = async (req, res) => {
-  const { token } = req.headers;
+export const deleteWorkspace = async (req, res, next) => {
   const { workspaceId } = req.params;
+  const userId = req.user.id;
+
   try {
-    const decoded = jwt.verify(token, secretKey);
-    const workspace = await Workspace.findOneAndDelete({
-      _id: workspaceId,
-      userId: decoded.id,
-    });
-    if (!workspace) {
-      return res
-        .status(404)
-        .json({ success: false, error: "Workspace not found" });
-    }
-    res.json({ success: true, message: "Workspace deleted successfully" });
+    const result = await deleteWorkspaceService(userId, workspaceId);
+    res
+      .status(StatusCodes.OK)
+      .json(responseGenerators({}, StatusCodes.OK, result.message, 1));
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    next(err);
   }
 };
 
-export const addCommandToWorkspace = async (req, res) => {
-  const { token } = req.headers;
-  const { workspaceId, command } = req.body; // command should be an object with key and value
+export const addCommandToWorkspace = async (req, res, next) => {
+  const { workspaceId, command } = req.body;
+  const userId = req.user.id;
 
   try {
-    const decoded = jwt.verify(token, secretKey);
-
-    const workspace = await Workspace.findOne({ _id: workspaceId, userId: decoded.id });
-
-    if (!workspace) {
-      return res.status(404).json({ success: false, error: "Workspace not found" });
-    }
-
-    workspace.commands.push(command);
-    await workspace.save();
-
-    res.json({ success: true, workspace });
+    const workspace = await addCommandToWorkspaceService(
+      userId,
+      workspaceId,
+      command
+    );
+    res
+      .status(StatusCodes.OK)
+      .json(
+        responseGenerators(
+          workspace,
+          StatusCodes.OK,
+          "Command added successfully",
+          1
+        )
+      );
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    next(err);
   }
 };

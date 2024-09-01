@@ -6,11 +6,11 @@ import {
   addCommandToWorkspace,
 } from "../controllers/workspaceController.js";
 
-const router = express.Router();
+const workspaceRoutes = express.Router();
 
-router.post("/workspace", createWorkspace);
-router.get("/workspaces", getWorkspaces);
-router.delete("/workspaces/:workspaceId", deleteWorkspace);
-router.post("/workspace/command", addCommandToWorkspace);
+workspaceRoutes.post("/workspace", createWorkspace);
+workspaceRoutes.get("/workspaces", getWorkspaces);
+workspaceRoutes.delete("/workspaces/:workspaceId", deleteWorkspace);
+workspaceRoutes.post("/workspace/command", addCommandToWorkspace);
 
-export default router;
+export default workspaceRoutes;
