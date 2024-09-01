@@ -8,7 +8,7 @@ const useSignUp = () => {
   const navigate = useNavigate();
   const handleSignUp = useMutation({
     mutationKey: ["signupUser"],
-    mutationFn: async (data) => callPostApi("/api/register", data),
+    mutationFn: async (data) => callPostApi("/api/auth/register", data),
     onSuccess: (data) => {
       navigate("/login");
     },

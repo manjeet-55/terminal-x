@@ -27,11 +27,10 @@ export default function RightSidebar() {
   const handleWorkspaceClick = (index) => {
     setOpenWorkspace(openWorkspace === index ? null : index);
   };
-  console.log("workSpacesData", workSpacesData);
 
   useEffect(() => {
-    if (workSpacesData?.data?.workspaces) {
-      setWorkspaces(workSpacesData?.data?.workspaces);
+    if (workSpacesData?.data?.data) {
+      setWorkspaces(workSpacesData?.data?.data);
     }
   }, [workSpacesData]);
 
