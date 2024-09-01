@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   const mongoUri = process.env.BACKEND_URL;
-
+console.log("process.env.BACKEND_URL",process.env.BACKEND_URL)
   const connectionOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,

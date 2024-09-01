@@ -1,0 +1,26 @@
+{
+  "name": "new-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cli-box": "^6.0.10",
+    "color": "^4.2.3",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "graceful-goodbye": "^1.3.0",
+    "holesail-client": "^1.1.3",
+    "holesail-server": "^1.4.1",
+    "minimist": "^1.2.8",
+    "node-pty": "^1.0.0",
+    "pm2": "^5.4.2",
+    "qrcode-terminal": "^0.12.0"
+  }
+}

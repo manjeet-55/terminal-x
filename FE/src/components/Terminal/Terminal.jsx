@@ -62,9 +62,23 @@ const TerminalComponent = () => {
     setChatHistory([]);
   };
 
-  const createTerminal = () => {
-    const term = new Terminal({ cursorBlink: true, cursorStyle: "bar" });
-    const socket = new WebSocket("ws://localhost:6060");
+    const createTerminal = () => {
+      const term = new Terminal({
+        cursorBlink: true,
+        cursorStyle: "bar",
+        scrollback: 1000, // Define scrollback buffer size
+        rows: 20, // Define initial number of rows
+        cols: 80, // Define initial number of columns
+        fontSize: 14, // Define font size
+        fontFamily: 'Monaco, monospace', // Define font family
+        theme: {
+          background: '#1e1e1e', // Define terminal background color
+          foreground: '#dcdcdc', // Define terminal text color
+        },
+        allowProposedApi: true, // Allow experimental APIs
+        bellStyle: 'sound', // Configure bell style (none, sound, or visual)
+        lineHeight: 1.5, // Define line height
+      });    const socket = new WebSocket("ws://localhost:6060");
 
     socket.onopen = () => {
       console.log("WebSocket connection opened");

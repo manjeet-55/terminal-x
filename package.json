@@ -15,8 +15,10 @@
   "version": "1.0.0",
   "main": "backend.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon backend.js"
+    "frontend": "npm run dev --prefix ./FE",
+    "backend-db": "nodemon start --prefix ./BE/server.js",
+    "backend": "nodemon ./New_Backend/index.js --live 6060 --connector uvin --force",
+    "start:all": "concurrently  \"npm run backend-db\" \"npm run backend\" \"npm run frontend\""
   },
   "repository": {
     "type": "git",
@@ -28,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/utkarshpayal/TerminalX.git/issues"
   },
-  "homepage": "https://github.com/utkarshpayal/TerminalX.git#readme"
+  "homepage": "https://github.com/utkarshpayal/TerminalX.git#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

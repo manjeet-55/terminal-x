@@ -4,7 +4,7 @@ const argv = require('minimist')(process.argv.slice(2)); // Required to parse CL
 const goodbye = require('graceful-goodbye');
 const pkg = require('./package.json'); // Holds info about the current package
 
-var colors = require('colors/safe');
+var colors = require('colors/safe.js');
 
 // Require all necessary files
 const Client = require('./includes/client.js');

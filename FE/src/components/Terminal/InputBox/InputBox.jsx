@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './InputBox.css'; // Use a separate CSS file for styling
 
-const InputBox = ({ onSend, currentTerminal }) => {
+const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
   const inputRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const recognitionRef = useRef(null);
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const InputBox = ({ onSend, currentTerminal }) => {
       recognitionRef.current.continuous = false;
 
       recognitionRef.current.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
+        const transcript = event.results[0][0].transcript.toLowerCase();
         if (inputRef.current) {
           inputRef.current.value = transcript;
         }
@@ -31,6 +32,11 @@ const InputBox = ({ onSend, currentTerminal }) => {
 
       recognitionRef.current.onend = () => {
         setIsListening(false);
+        // Automatically execute the command after stopping
+        if (inputRef.current && onSend) {
+          onSend(inputRef.current.value, currentTerminal);
+          inputRef.current.value = ''; // Clear input after sending
+        }
       };
     } else {
       console.warn('SpeechRecognition not supported in this browser.');
@@ -43,7 +49,7 @@ const InputBox = ({ onSend, currentTerminal }) => {
         recognitionRef.current.onend = null;
       }
     };
-  }, []);
+  }, [onSend, currentTerminal]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -74,8 +80,23 @@ const InputBox = ({ onSend, currentTerminal }) => {
   const stopListening = () => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
-      setIsListening(false);
     }
+  };
+
+  const handleProcessClick = () => {
+    // Simulate the execution of the "ps" command
+    if (onSend) {
+      onSend('ps -a', currentTerminal);
+    }
+
+    // Display the modal after a delay
+    setTimeout(() => {
+      setShowModal(true);
+    }, 1000); // 1-second delay
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -88,6 +109,12 @@ const InputBox = ({ onSend, currentTerminal }) => {
         aria-label="Command input box"
       />
       <button
+        onClick={handleProcessClick}
+        className="mt-4 block px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
+      >
+        Process
+      </button>
+      <button
         onClick={() => {
           if (isListening) {
             stopListening();
@@ -99,7 +126,58 @@ const InputBox = ({ onSend, currentTerminal }) => {
       >
         {isListening ? 'Stop' : 'Mic'}
       </button>
-    </div>
+
+      {/* Modal for displaying the command output */}
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg max-w-2xl w-full">
+            <h2 className="text-xl font-bold mb-4">Running Processes</h2>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Process ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Port
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Details
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {commandOutput.map((process, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {process.id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {process.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {process.port}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {process.details}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              onClick={closeModal}
+              className="mt-4 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 focus:outline-none"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>  
   );
 };
 
