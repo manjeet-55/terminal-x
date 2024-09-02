@@ -22,7 +22,7 @@ function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const userEmail = localStorage.getItem("x-email") || "";
+  const userEmail = localStorage.getItem("user-email") || "";
   console.log("userEmail", userEmail);
   return (
     <React.Fragment>
@@ -108,6 +108,7 @@ function AccountMenu() {
           <ListItemIcon
             onClick={() => {
               navigate("/login");
+              localStorage.clear();
             }}
           >
             <Logout fontSize="small" />

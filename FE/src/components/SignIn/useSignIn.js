@@ -10,8 +10,8 @@ const useSignIn = () => {
     mutationKey: ["loginUser"],
     mutationFn: async (data) => callPostApi("/api/auth/login", data),
     onSuccess: (response) => {
-      localStorage.setItem("x-token", response.data.data.token);
-      localStorage.setItem("x-email", response.data.data.email);
+      localStorage.setItem("user-token", response.data.data.token);
+      localStorage.setItem("user-email", response.data.data.email);
       navigate("/");
     },
     onError: (error) => {

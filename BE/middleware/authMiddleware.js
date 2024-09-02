@@ -1,15 +1,14 @@
-// authMiddleware.js
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req, res, next) => {
-  console.log("req.headers", req.headers.token)
-  const { token } = req.headers;
+  const authHeader = req.headers["authorization"];
 
-  if (!token) {
+  if (!authHeader) {
     return res
       .status(401)
       .json({ message: "Access Denied: No token provided" });
   }
+  const token = authHeader.split(" ")[1];
 
   try {
     const secretKey = process.env.JWT_SECRET;

@@ -4,79 +4,53 @@ import axios from "./axios.js";
 export const ApiServices = () => {
   const navigate = useNavigate();
 
-  const callPostApi = async (endPoint, data, authorization) => {
-    try {
-      const headers = {
-        "Content-Type": "application/json",
-        referrerPolicy: "no-referrer",
-        mode: "no-mode",
-        "Access-Control-Allow-Origin": "*",
-      };
+  const getHeaders = async () => {
+    const contentTypeValue = "application/json";
 
-      if (authorization) {
-        const token = localStorage.getItem("x-token") || "";
-        if (token) {
-          headers.token = token;
-        } else {
-          return navigate("/login");
-        }
-      }
+    const token = localStorage.getItem("user-token") || "";
 
-      const response = await axios.post(endPoint, data, { headers });
-      return response;
-    } catch (error) {
+    console.log("token at FE",token)
+    return {
+      "Content-Type": contentTypeValue,
+      referrerPolicy: "no-referrer",
+      mode: "no-mode",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: token ? `Bearer ${token}` : undefined,
+    };
+  };
+
+  const handleUnauthorized = async (error) => {
+    if (error?.response && error.response?.status === 401) {
+      alert("Your session has expired or the token is invalid.");
+      localStorage.clear();
+      navigate("/login");
+    } else {
       throw error;
     }
   };
 
-  const callGetApi = async (endPoint, authorization) => {
+  const callApi = async (method, endPoint, data = null) => {
     try {
-      const headers = {
-        "Content-Type": "application/json",
-        referrerPolicy: "no-referrer",
-        mode: "no-mode",
-        "Access-Control-Allow-Origin": "*",
-      };
-
-      if (authorization) {
-        const token = localStorage.getItem("x-token") || "";
-        if (token) {
-          headers.token = token;
-        } else {
-          return navigate("/login");
-        }
-      }
-
-      const response = await axios.get(endPoint, { headers });
+      const headers = await getHeaders();
+      const config = { headers };
+      const response =
+        method === "get" || method === "delete"
+          ? await axios[method](endPoint, config)
+          : await axios[method](endPoint, data, config);
       return response;
     } catch (error) {
+      await handleUnauthorized(error);
       throw error;
     }
   };
 
-  const callDeleteApi = async (endPoint, authorization) => {
-    try {
-      const headers = {
-        "Content-Type": "application/json",
-        referrerPolicy: "no-referrer",
-        mode: "no-mode",
-        "Access-Control-Allow-Origin": "*",
-      };
+  const callGetApi = async (endPoint) => callApi("get", endPoint);
+  const callPostApi = async (endPoint, data) => callApi("post", endPoint, data);
+  const callPutApi = async (endPoint, data) => callApi("put", endPoint, data);
+  const callDeleteApi = async (endPoint, id) =>
+    callApi("delete", `${endPoint}${id}`);
+  const callPatchApi = async (endPoint, data) =>
+    callApi("patch", endPoint, data);
 
-      if (authorization) {
-        const token = localStorage.getItem("x-token") ||"";
-        if (token) {
-          headers.token = token;
-        } else {
-          return navigate("/login");
-        }
-      }
-
-      const response = await axios.delete(endPoint, { headers });
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-  return { callGetApi, callPostApi, callDeleteApi };
+  return { callGetApi, callPostApi, callPutApi, callDeleteApi, callPatchApi };
 };

@@ -13,11 +13,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Terminal />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
-        <Route path="" element={<ProtectedRoute />}>
-          <Route path="/login" element={<SignIn />}>
-          </Route>
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/" element={<ProtectedRoute />}>
+          <Route index element={<Terminal />} /> {/* Protected Terminal route */}
         </Route>
       </Routes>
     </BrowserRouter>
