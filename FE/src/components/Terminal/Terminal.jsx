@@ -1,3 +1,4 @@
+// src/components/TerminalComponent.js
 import React, { useEffect, useRef, useState } from "react";
 import { Terminal } from "xterm";
 import "xterm/css/xterm.css";
@@ -7,16 +8,15 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import ChatHistory from "../ChatHistory/index";
 import "./Terminal.css";
 import Button from "../Button";
+import Navbar from "../Navbar/Navbar";
 
 const TerminalComponent = () => {
   const [userInput, setUserInput] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [commandHistory, setCommandHistory] = useState([]);
-
   const [terminals, setTerminals] = useState([]);
   const [currentTerminal, setCurrentTerminal] = useState(null);
-  
   const [queuedCommands, setQueuedCommands] = useState([]);
   const socketRefs = useRef([]);
   const terminalRefs = useRef([]);
@@ -27,7 +27,8 @@ const TerminalComponent = () => {
 
   useEffect(() => {
     createTerminal();
-  }, []); 
+  }, []);
+
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
   };
@@ -66,23 +67,25 @@ const TerminalComponent = () => {
     setChatHistory([]);
   };
 
-    const createTerminal = () => {
-      const term = new Terminal({
-        cursorBlink: true,
-        cursorStyle: "bar",
-        scrollback: 1000, // Define scrollback buffer size
-        rows: 20, // Define initial number of rows
-        cols: 80, // Define initial number of columns
-        fontSize: 14, // Define font size
-        fontFamily: 'Monaco, monospace', // Define font family
-        theme: {
-          background: '#1e1e1e', // Define terminal background color
-          foreground: '#dcdcdc', // Define terminal text color
-        },
-        allowProposedApi: true, // Allow experimental APIs
-        bellStyle: 'sound', // Configure bell style (none, sound, or visual)
-        lineHeight: 1.5, // Define line height
-      });    const socket = new WebSocket("ws://localhost:6060");
+  const createTerminal = () => {
+    const term = new Terminal({
+      cursorBlink: true,
+      cursorStyle: "bar",
+      scrollback: 1000,
+      rows: 20,
+      cols: 80,
+      fontSize: 14,
+      fontFamily: 'Monaco, monospace',
+      theme: {
+        background: '#1e1e1e',
+        foreground: '#dcdcdc',
+      },
+      allowProposedApi: true,
+      bellStyle: 'sound',
+      lineHeight: 1.5,
+    });
+
+    const socket = new WebSocket("ws://localhost:6060");
 
     socket.onopen = () => {
       console.log("WebSocket connection opened");
@@ -115,21 +118,17 @@ const TerminalComponent = () => {
     setCurrentTerminal(terminals.length);
   };
 
-
   const handleEnter = (command) => {
     if (currentTerminal !== null) {
       const formattedCommand = command;
-
-      // Include terminalId in the message
       const message = JSON.stringify({
         terminalId: currentTerminal,
         command: formattedCommand,
       });
 
-      sendToSocket(message); // Send command to the correct terminal
-      sendMessage(); // This might be for other purposes, ensure it's defined properly
+      sendToSocket(message);
+      sendMessage();
 
-      // Update command history
       const newCommandHistory = [
         ...commandHistory,
         { command: formattedCommand, timestamp: new Date().toISOString() },
@@ -138,7 +137,7 @@ const TerminalComponent = () => {
       localStorage.setItem("commandHistory", JSON.stringify(newCommandHistory));
     }
   };
-  
+
   const closeTerminal = (index) => {
     setTerminals((prev) => prev.filter((_, i) => i !== index));
 
@@ -172,38 +171,53 @@ const TerminalComponent = () => {
     });
   };
 
-
   const sendToSocket = (message) => {
     if (currentTerminal !== null) {
       const { socket } = terminals[currentTerminal];
       if (socket && socket.readyState === WebSocket.OPEN) {
-        // console.log(message)
-        socket.send(message); // Send message with terminalId
+        socket.send(message);
       } else {
         console.error("WebSocket is not open. Message not sent:", message);
-        queueCommand(message, currentTerminal); // Queue the command if the socket is not open
+        queueCommand(message, currentTerminal);
       }
     }
   };
-  
-  
-
-
-
-  
 
   const handleCopyToClipboard = (value) => {
     navigator.clipboard.writeText(value);
   };
 
-
   const switchTerminal = (index) => {
     setCurrentTerminal(index);
   };
 
+  // Function to send a sequence of commands to the current terminal
+  const sendCommandsSequence = () => {
+    if (currentTerminal !== null) {
+      const commands = [
+        'ls',
+        'cd Documents',
+        'mkdir NewFolder',
+        'ls -l',
+      ];
+
+      commands.forEach((command, index) => {
+        setTimeout(() => {
+          const commandMessage = JSON.stringify({
+            terminalId: currentTerminal,
+            command: command,
+          });
+
+          sendToSocket(commandMessage);
+        }, index * 1000); // Delay each command by 1 second
+      });
+    }
+  };
+
   return (
-    <div className="h-full w-full">
-      <div className="h-full flex w-full">
+    <div className="h-full w-full flex flex-col">
+      <Navbar onStoreClick={sendCommandsSequence} />
+      <div className="flex flex-row h-full w-full">
         <div className="w-[30%] flex flex-col bg-slate-600 border-t border-t-gray-400 p-2 border-r-[1px] border-white">
           <div className="m-2">
             <input
@@ -214,59 +228,56 @@ const TerminalComponent = () => {
               onChange={handleUserInput}
             />
             <div className="flex flex-row gap-3 w-full">
-              
-            <Button
+              <Button
                 onClick={sendMessage}
                 disabled={isLoading}
                 variant="primary"
-                >Send
-            </Button>
-              
+              >
+                Send
+              </Button>
               <Button
                 onClick={clearChat}
                 variant="secondary"
-                >Clear
-            </Button>
+              >
+                Clear
+              </Button>
             </div>
           </div>
           <div className="p-2">
             <ChatHistory chatHistory={chatHistory} />
           </div>
         </div>
-        <div className="flex flex-col items-center w-[100%]">
-          <div className="flex flex-row gap-x-4">
-           
-          <button
-              className="mt-4 p-2 w-32 flex justify-center rounded-lg bg-gray-600 text-white hover:bg-gray-700 focus:outline-none text-lg font-[500] font-inter"
+        <div className="flex flex-col items-center w-[70%]">
+          <div className="tabs-container flex flex-row gap-x-4 overflow-x-auto whitespace-nowrap">
+            <button
+              className="m-2 w-32 flex justify-center rounded-lg bg-gray-600 text-white hover:bg-gray-700 focus:outline-none text-lg font-[500] font-inter"
               onClick={createTerminal}
             >
               New Tab
             </button>
-
             {terminals.map((terminal, index) => (
-  <div
-    key={index}
-    className={`mt-4 p-2 w-20 flex justify-between rounded-lg text-lg font-[500] font-inter ${
-      currentTerminal === index ? "bg-blue-500" : "bg-gray-600"
-    } text-white hover:bg-blue-500 focus:outline-none`}
-    onClick={(e) => {
-      e.stopPropagation();
-      switchTerminal(index);
-    }}
-  >
-    <span> {index + 1}</span>
-    <span
-      className="ml-2 cursor-pointer text-red-600"
-      onClick={(e) => {
-        e.stopPropagation(); // Prevent triggering the parent click event
-        closeTerminal(index);
-      }}
-    >
-      x
-    </span>
-  </div>
-))}
-
+              <div
+                key={index}
+                className={`m-2 w-24 p-1 flex justify-between rounded-lg text-lg font-[500] font-inter ${
+                  currentTerminal === index ? "bg-blue-500" : "bg-gray-600"
+                } text-white hover:bg-blue-500 focus:outline-none`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  switchTerminal(index);
+                }}
+              >
+                <span> {index + 1}</span>
+                <span
+                  className="ml-2 cursor-pointer text-red-600"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent triggering the parent click event
+                    closeTerminal(index);
+                  }}
+                >
+                  x
+                </span>
+              </div>
+            ))}
           </div>
           {terminals.map((terminal, index) => (
             <div
@@ -277,15 +288,11 @@ const TerminalComponent = () => {
             </div>
           ))}
           <InputBox onSend={handleEnter} />
-         
         </div>
         <div className="w-[30%] bg-[#1f1514]">
           <Workspace />
         </div>
       </div>
-
-      {/* History Popup */}
-     
     </div>
   );
 };

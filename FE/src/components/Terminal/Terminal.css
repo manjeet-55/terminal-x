@@ -1,63 +1,86 @@
+/* Container for the terminal */
+.terminal-container {
+  flex: 1; /* Allows terminal to expand and fill available space */
+  min-width: 0;
+  min-height: 0; /* Ensures the terminal container can shrink to fit its content */
+  display: flex;
+  flex-direction: column;
+}
 
+/* Terminal styling */
 .terminal {
-  padding: 10px;
+  padding: 0; /* Removes padding to ensure terminal height is consistent */
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Ensures terminal takes up remaining space within its container */
 }
+
+/* Viewport styling for the xterm terminal */
 .xterm .xterm-viewport {
-  height: 100%;
-  cursor: default !important;
-  /* position: absolute !important;
-    right: 0 !important;
-    left: 0 !important;
-    top: 0 !important;
-    bottom: 0 !important; */
-  /* margin: -10px !important; */
-  border-radius: 5px !important;
-  width: 100%;
+  height: 100%; /* Ensures the viewport takes up the full height of its container */
+  width: 100%; /* Ensures the viewport takes up the full width of its container */
+  cursor: default !important; /* Sets cursor style */
+  border-radius: 5px; /* Rounds the corners of the viewport */
+  overflow: hidden; /* Ensures no scrollbars are visible */
+  background: #1e1e1e; /* Sets the background color to match the terminal */
 }
 
+/* Screen styling for the xterm terminal */
 .xterm .xterm-screen {
-  height: 500px !important;
+  height: 100%; /* Ensures the screen takes up the full height of the viewport */
+  overflow: hidden; /* Hides overflow to prevent extra scrolling */
 }
 
-.xterm-rows{
-  height: 100%
-}
-.xterm-dim {
-  opacity: 0.5;
+/* Styling for rows within the xterm terminal */
+.xterm-rows {
+  height: 100%; /* Ensures rows take up full height */
+  font-family: "Courier New", monospace; /* Sets the font for terminal text */
+  overflow: hidden; /* Hides overflow to prevent extra scrolling */
 }
 
+/* Styling for dim text */
 .xterm .xterm-dim {
-  opacity: 0.5 !important;
+  opacity: 0.5 !important; /* Sets opacity for dimmed text */
 }
 
-.xterm-bold {
-  font-weight: bold !important;
-}
-
+/* Styling for bold text */
 .xterm .xterm-bold {
-  font-weight: bold !important;
+  font-weight: bold !important; /* Ensures text is bold */
 }
 
+/* Combined styling for bold and dim text */
 .xterm-dim.xterm-bold {
   opacity: 0.5;
   font-weight: bold;
 }
 
+/* Combined styling for bold and dim text with !important */
 .xterm .xterm-dim.xterm-bold {
   opacity: 0.5 !important;
   font-weight: bold !important;
 }
 
+/* Optional: Specific styling for non-bold text if needed */
 /* .xterm span:not(.xterm-bold) {
     font-weight: 600; 
     font-size: 18px !important;
-  }
-   */
-.xterm .xterm-rows {
-  font-family: "Courier New", monospace;
+} */
+.tab-container {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: hidden; /* Hide vertical overflow */
+  white-space: nowrap; /* Prevent tabs from wrapping */
+  height: 50px; /* Adjust the height as needed */
+  border-bottom: 1px solid #ccc; /* Optional: Add a border for better visibility */
 }
 
-/* .xterm-dom-renderer-owner-2 span.xterm-bold {
-    font-weight: bold;
-    font-size: 18px;
-  } */
+.tab {
+  display: inline-block;
+  margin: 0 4px; /* Space between tabs */
+  padding: 8px 12px;
+  background-color: #666;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
