@@ -22,6 +22,11 @@ function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
   const userEmail = localStorage.getItem("user-email") || "";
   console.log("userEmail", userEmail);
   return (
@@ -104,13 +109,8 @@ function AccountMenu() {
           </ListItemIcon>
           Settings
         </MenuItem> */}
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon
-            onClick={() => {
-              navigate("/login");
-              localStorage.clear();
-            }}
-          >
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout

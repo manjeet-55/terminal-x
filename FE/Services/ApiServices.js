@@ -9,7 +9,6 @@ export const ApiServices = () => {
 
     const token = localStorage.getItem("user-token") || "";
 
-    console.log("token at FE",token)
     return {
       "Content-Type": contentTypeValue,
       referrerPolicy: "no-referrer",
@@ -47,8 +46,7 @@ export const ApiServices = () => {
   const callGetApi = async (endPoint) => callApi("get", endPoint);
   const callPostApi = async (endPoint, data) => callApi("post", endPoint, data);
   const callPutApi = async (endPoint, data) => callApi("put", endPoint, data);
-  const callDeleteApi = async (endPoint, id) =>
-    callApi("delete", `${endPoint}${id}`);
+  const callDeleteApi = async (endPoint) => callApi("delete", endPoint);
   const callPatchApi = async (endPoint, data) =>
     callApi("patch", endPoint, data);
 

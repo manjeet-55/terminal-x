@@ -36,7 +36,7 @@ export const useWorkSpace = () => {
   const handleDeleteWorkspace = useMutation({
     mutationKey: ["handleDeleteWorkspace"],
     mutationFn: async (workspaceId) =>
-      callDeleteApi(`/api/workspaces/${workspaceId}`, true),
+      callDeleteApi(`/api/workspaces/${workspaceId}`),
     onSuccess: (data) => {
       queryClient.invalidateQueries(["getWorkSpaces"]);
     },
