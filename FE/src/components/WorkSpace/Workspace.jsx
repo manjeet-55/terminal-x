@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Divider } from "@mui/material";
 import { useWorkSpace } from "./useWorkSpace";
 import History from "../History/History";
+import Button from "../Button";
 
 const initialWorkspaces = [
   { name: "Workspace 1", commands: [{ key: "cmd1", value: "Command 1" }] },
@@ -81,12 +82,12 @@ export default function RightSidebar() {
             onChange={(e) => setNewWorkspaceName(e.target.value)}
             className="p-2 bg-gray-900 border border-white rounded text-white outline-none"
           />
-          <button
+          <Button
             onClick={handleAddWorkspace}
-            className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 rouned-lg"
+            variant="primary"
           >
             Add
-          </button>
+          </Button>
         </div>
 
         {/* List of Workspaces */}
