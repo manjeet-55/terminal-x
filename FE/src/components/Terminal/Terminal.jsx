@@ -24,6 +24,9 @@ const TerminalComponent = () => {
   );
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+  useEffect(() => {
+    createTerminal();
+  }, []); 
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
   };
@@ -111,6 +114,7 @@ const TerminalComponent = () => {
     setCurrentTerminal(terminals.length);
   };
 
+
   const handleEnter = (command) => {
     if (currentTerminal !== null) {
       const formattedCommand = command;
@@ -134,7 +138,16 @@ const TerminalComponent = () => {
     }
   };
   
-  
+  const closeTerminal = (index) => {
+    setTerminals((prev) => prev.filter((_, i) => i !== index));
+
+    if (currentTerminal === index) {
+      setCurrentTerminal(index > 0 ? index - 1 : 0);
+    } else if (currentTerminal > index) {
+      setCurrentTerminal(currentTerminal - 1);
+    }
+  };
+
   const queueCommand = (command, terminalId) => {
     setQueuedCommands((prev) => [...prev, { command, terminalId }]);
   };
@@ -226,25 +239,40 @@ const TerminalComponent = () => {
               onClick={createTerminal}
             >
               New Tab
-            </button>
+            </button> 
+
             {terminals.map((terminal, index) => (
-              <button
-                key={index}
-                className={`mt-4 p-2 w-20 flex justify-center rounded-lg  text-lg font-[500] font-inter ${
-                  currentTerminal === index ? "bg-blue-500" : "bg-gray-600"
-                } text-white hover:bg-blue-500 focus:outline-none`}
-                onClick={() => switchTerminal(index)}
-              >
-                Tab {index + 1}
-              </button>
-            ))}
+  <div
+    key={index}
+    className={`mt-4 p-2 w-20 flex justify-between rounded-lg text-lg font-[500] font-inter ${
+      currentTerminal === index ? "bg-blue-500" : "bg-gray-600"
+    } text-white hover:bg-blue-500 focus:outline-none`}
+    onClick={(e) => {
+      e.stopPropagation();
+      switchTerminal(index);
+    }}
+  >
+    <span>Tab {index + 1}</span>
+    <span
+      className="ml-2 cursor-pointer text-red-600"
+      onClick={(e) => {
+        e.stopPropagation(); // Prevent triggering the parent click event
+        closeTerminal(index);
+      }}
+    >
+      x
+    </span>
+  </div>
+))}
+
           </div>
           {terminals.map((terminal, index) => (
             <div
               key={index}
               id={`terminal-${index}`}
               className={`terminal-container w-full ${currentTerminal === index ? "" : "hidden"}`}
-            ></div>
+            >
+            </div>
           ))}
           <InputBox onSend={handleEnter} />
          
