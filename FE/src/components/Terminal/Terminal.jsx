@@ -6,6 +6,7 @@ import Workspace from "../WorkSpace/Workspace";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import ChatHistory from "../ChatHistory/index";
 import "./Terminal.css";
+import Button from "../Button";
 
 const TerminalComponent = () => {
   const [userInput, setUserInput] = useState("");
@@ -213,19 +214,19 @@ const TerminalComponent = () => {
               onChange={handleUserInput}
             />
             <div className="flex flex-row gap-3 w-full">
-              <button
-                className="px-3 mt-4 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none w-[45%]"
+              
+            <Button
                 onClick={sendMessage}
                 disabled={isLoading}
-              >
-                Send
-              </button>
-              <button
-                className="mt-4 block px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 focus:outline-none"
+                variant="primary"
+                >Send
+            </Button>
+              
+              <Button
                 onClick={clearChat}
-              >
-                Clear Chat
-              </button>
+                variant="secondary"
+                >Clear
+            </Button>
             </div>
           </div>
           <div className="p-2">
@@ -234,12 +235,13 @@ const TerminalComponent = () => {
         </div>
         <div className="flex flex-col items-center w-[100%]">
           <div className="flex flex-row gap-x-4">
-            <button
+           
+          <button
               className="mt-4 p-2 w-32 flex justify-center rounded-lg bg-gray-600 text-white hover:bg-gray-700 focus:outline-none text-lg font-[500] font-inter"
               onClick={createTerminal}
             >
               New Tab
-            </button> 
+            </button>
 
             {terminals.map((terminal, index) => (
   <div
@@ -252,7 +254,7 @@ const TerminalComponent = () => {
       switchTerminal(index);
     }}
   >
-    <span>Tab {index + 1}</span>
+    <span> {index + 1}</span>
     <span
       className="ml-2 cursor-pointer text-red-600"
       onClick={(e) => {

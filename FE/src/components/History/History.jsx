@@ -1,4 +1,6 @@
+// import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import Button from "../Button";
 
 const History = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -63,18 +65,18 @@ const History = () => {
     <>
       <div className="bg-gray-800 px-4 py-4">
         <div className="flex flex-row justify-end gap-x-4">
-          <button
-            className="mt-4 block px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
+        <Button
             onClick={toggleHistoryPopup}
-          >
-            History
-          </button>
-          <button
-            className="mt-4 block px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
+            variant="primary"
+          >History
+            </Button>
+            <Button
             onClick={toggleProcessPopup}
-          >
-            Process
-          </button>
+            variant="primary"
+          >Process
+            </Button>
+        
+         
         </div>
       </div>
       {isHistoryOpen && (
@@ -106,18 +108,18 @@ const History = () => {
                 </div>
               )}
             </div>
-            <button
-              className="mt-4 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 focus:outline-none"
-              onClick={clearHistory}
-            >
-              Clear History
-            </button>
-            <button
-              className="mt-4 px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
-              onClick={toggleHistoryPopup}
-            >
-              Close
-            </button>
+            
+            <Button
+                onClick={clearHistory}
+                variant="secondary"
+                >Clear History
+            </Button>
+           
+             <Button
+                onClick={toggleHistoryPopup}
+                variant="primary"
+                >Close
+            </Button>
           </div>
         </div>
       )}
@@ -163,18 +165,18 @@ const History = () => {
                 ))}
               </tbody>
             </table>
-            <button
-              className="mt-4 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 focus:outline-none"
+            <Button
               onClick={clearProcessList}
-            >
-              Clear Processes
-            </button>
-            <button
-              className="mt-4 px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
+              variant="secondary"
+              > Clear Processes
+            </Button>
+           
+            
+            <Button
               onClick={toggleProcessPopup}
-            >
-              Close
-            </button>
+              variant="primary"
+              >Close
+            </Button>
           </div>
         </div>
       )}

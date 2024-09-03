@@ -5,7 +5,7 @@ const Button = ({
   children,
   onClick,
   variant = "primary",
-  size = "md",
+  size = "sm",
   disabled = false,
   fullWidth = false,
   className = "",
@@ -15,14 +15,12 @@ const Button = ({
 
   const variantStyles = {
     primary: `
-          bg-blue-600 text-white 
-          hover:bg-transparent hover:border-2 hover:border-blue-600 hover:text-blue-600
-          focus:ring-blue-500
+          bg-blue-600 text-white border border-transparent
+          hover:bg-transparent hover:border hover:border-blue-600 hover:text-blue-600
         `,
     secondary: `
-          bg-red-500 text-white 
-          hover:bg-transparent hover:border-2 hover:border-red-500 hover:text-red-500
-          focus:ring-red-500
+          bg-red-500 text-white border border-transparent
+          hover:bg-transparent hover:border hover:border-red-500 hover:text-red-500
         `,
     outlinePrimary: `
           bg-transparent border-2 border-blue-600 text-blue-600 

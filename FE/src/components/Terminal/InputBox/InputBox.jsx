@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './InputBox.css'; // Use a separate CSS file for styling
+import Button from '../../Button';
 
 const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
   const inputRef = useRef(null);
@@ -108,24 +109,25 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
         className="bg-gray-800 rounded-xl mr-2 p-[8px] w-[100%] outline-none text-white/80 placeholder:text-white/70 break-all"
         aria-label="Command input box"
       />
-      <button
-        onClick={handleProcessClick}
-        className="mt-4 block px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
-      >
-        Process
-      </button>
-      <button
-        onClick={() => {
+     
+      <Button
+            onClick={handleProcessClick}
+            variant="primary"
+            >Process
+      </Button>
+      
+      <Button
+            onClick={() => {
           if (isListening) {
             stopListening();
           } else {
             startListening();
           }
         }}
-        className={`text-white/90 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg focus:outline-none ${isListening ? 'bg-red-600' : ''}`}
-      >
-        {isListening ? 'Stop' : 'Mic'}
-      </button>
+            variant="secondary"
+            >{isListening ? 'Stop' : 'Mic'}
+
+      </Button>
 
       {/* Modal for displaying the command output */}
       {showModal && (
@@ -168,12 +170,12 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
                 ))}
               </tbody>
             </table>
-            <button
-              onClick={closeModal}
-              className="mt-4 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 focus:outline-none"
-            >
-              Close
-            </button>
+            
+            <Button
+                onClick={closeModal}
+                variant="secondary"
+                >Close
+          </Button>
           </div>
         </div>
       )}

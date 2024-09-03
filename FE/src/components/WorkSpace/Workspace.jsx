@@ -94,18 +94,21 @@ export default function RightSidebar() {
         {workspaces.map((workspace, index) => (
           <div key={index} className="mb-4">
             {/* Workspace Header */}
+            
             <button
               onClick={() => handleWorkspaceClick(index)}
               className="w-full flex items-center justify-between p-2 bg-gray-900 text-white rounded transition text-lg"
             >
               <span>{workspace.name}</span>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => handleDeleteWorkspaceAction(index)}
-                  className="text-red-500 hover:text-red-400"
-                >
-                  <DeleteIcon />
-                </button>
+               
+                <Button
+                    onClick={() => handleDeleteWorkspaceAction(index)}
+                    variant="secondary"
+                  >
+                   <DeleteIcon />
+                </Button>
+                
                 <KeyboardArrowDown
                   className={`transition-transform ${
                     openWorkspace === index ? "rotate-180" : ""
@@ -139,12 +142,14 @@ export default function RightSidebar() {
                       className="p-2 bg-gray-900 border border-white rounded text-white outline-none"
                     />
                   </div>
-                  <button
-                    onClick={() => handleAddCommandInWorkSpace(index)}
-                    className="p-2 text-white border border-white/60 rounded-lg hover:bg-green-700 flex items-center justify-center"
-                  >
-                    <AddIcon />
-                  </button>
+                  
+                  <Button
+            onClick={() => handleAddCommandInWorkSpace(index)}
+            variant="primary"
+          >
+            <AddIcon />
+
+          </Button>
                 </div>
 
                 {/* List of Commands */}
@@ -160,20 +165,22 @@ export default function RightSidebar() {
                         <span className="text-sm">{command.value}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => handleCopyToClipboard(command.value)}
-                          className="p-1 text-white/90 hover:text-white transition"
-                        >
+                       
+                        <Button
+                            onClick={() => handleCopyToClipboard(command.value)}
+                            variant="primary"
+                          >    
                           <ContentCopyIcon />
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleDeleteCommand(index, commandIndex)
-                          }
-                          className="p-1 text-red-500 hover:text-red-400"
-                        >
-                          <DeleteIcon />
-                        </button>
+
+                        </Button>
+                        
+                        <Button
+                            onClick={() =>
+                            handleDeleteCommand(index, commandIndex)}
+                            variant="secondary"
+                          >
+                           <DeleteIcon />
+                      </Button>
                       </div>
                     </div>
                   ))}
