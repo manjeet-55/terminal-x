@@ -2,10 +2,10 @@ import "./App.css";
 import TerminalComponent from "./components/Terminal/Terminal";
 import Navbar from "./components/Navbar/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SignIn from "./components/SignIn";
-import Terminal from "./Pages/Terminal";
+import SignIn from "./Pages/SignIn";
+import Terminal from "./Pages/Terminal/Terminal";
 import { ProtectedRoute } from "./Pages/ProtectedRoute";
-import SignUp from "./components/SignUp";
+import SignUp from "./Pages/SignUp";
 // import UserProfile from "./components/UserProfile";
 // import Workspace from "./components/Workspace";
 
