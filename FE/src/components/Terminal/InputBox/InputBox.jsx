@@ -85,15 +85,15 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
   };
 
   const handleProcessClick = () => {
-    // Simulate the execution of the "ps" command
     if (onSend) {
+      // Execute the command
       onSend('ps -a', currentTerminal);
-    }
 
-    // Display the modal after a delay
-    setTimeout(() => {
-      setShowModal(true);
-    }, 1000); // 1-second delay
+      // Display the modal after a delay
+      setTimeout(() => {
+        setShowModal(true);
+      }, 1000); // 1-second delay
+    }
   };
 
   const closeModal = () => {
@@ -109,24 +109,25 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
         className="bg-gray-800 rounded-xl mr-2 p-[8px] w-[100%] outline-none text-white/80 placeholder:text-white/70 break-all"
         aria-label="Command input box"
       />
-     
+
       <Button
-            onClick={handleProcessClick}
-            variant="primary"
-            >Process
+        onClick={handleProcessClick}
+        variant="primary"
+      >
+        Process
       </Button>
-      
+
       <Button
-            onClick={() => {
+        onClick={() => {
           if (isListening) {
             stopListening();
           } else {
             startListening();
           }
         }}
-            variant="secondary"
-            >{isListening ? 'Stop' : 'Mic'}
-
+        variant="secondary"
+      >
+        {isListening ? 'Stop' : 'Mic'}
       </Button>
 
       {/* Modal for displaying the command output */}
@@ -170,16 +171,17 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
                 ))}
               </tbody>
             </table>
-            
+
             <Button
-                onClick={closeModal}
-                variant="secondary"
-                >Close
-          </Button>
+              onClick={closeModal}
+              variant="secondary"
+            >
+              Close
+            </Button>
           </div>
         </div>
       )}
-    </div>  
+    </div>
   );
 };
 

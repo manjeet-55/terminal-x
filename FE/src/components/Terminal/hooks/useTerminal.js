@@ -6,6 +6,7 @@ const useTerminal = (url, terminalContainerId) => {
   const [terminals, setTerminals] = useState([]);
   const [currentTerminal, setCurrentTerminal] = useState(null);
   const [queuedCommands, setQueuedCommands] = useState([]);
+  const [terminalOutputs, setTerminalOutputs] = useState({});
 
   useEffect(() => {
     createTerminal();
@@ -40,6 +41,10 @@ const useTerminal = (url, terminalContainerId) => {
 
     socket.onmessage = (event) => {
       term.write(event.data);
+      setTerminalOutputs((prev) => ({
+        ...prev,
+        [terminals.length]: (prev[terminals.length] || '') + event.data,
+      }));
     };
 
     socket.onerror = (error) => {
@@ -114,6 +119,8 @@ const useTerminal = (url, terminalContainerId) => {
     sendToSocket,
     closeTerminal,
     setCurrentTerminal,
+    terminalOutputs,
+    setTerminalOutputs
   };
 };
 
