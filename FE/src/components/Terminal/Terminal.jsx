@@ -9,12 +9,17 @@ import useTerminal from "./hooks/useTerminal";
 import "./Terminal.css";
 import { useDispatch } from "react-redux";
 import { addProcesses } from "../../../store/slices/processSlice";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const TerminalComponent = () => {
   const [userInput, setUserInput] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [commandHistory, setCommandHistory] = useState([]);
+  const genAI = new GoogleGenerativeAI(
+    import.meta.env.VITE_APP_AI_KEY
+  );
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const {
     terminals,
@@ -31,6 +36,39 @@ const TerminalComponent = () => {
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
   };
+
+
+
+  const sendMessage = async () => {
+    if (userInput.trim() === "") return;
+
+    setIsLoading(true);
+    try {
+      let prompt = `
+        ${userInput}
+        Instructions:
+        - If the input contains computer science coding commands, explain the command only.
+        - If the input contains non-coding related topics or anything else, respond with "Can't process."
+        - Do not include any symbols in the output.
+        - If I ask for a command, provide only the command as a single word.
+        - If I ask to explain a command, provide a detailed explanation of the command.
+      `;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      setChatHistory([
+        ...chatHistory,
+        { type: "user", message: userInput },
+        { type: "bot", message: response.text() },
+      ]);
+    } catch {
+      console.error("Error sending message");
+    } finally {
+      setUserInput("");
+      setIsLoading(false);
+    }
+  };
+
 
   const parseTerminalOutput = (output) => {
     // Split the output into lines
@@ -99,7 +137,7 @@ const TerminalComponent = () => {
             />
             <div className="flex flex-row gap-3 w-full">
               <Button
-                onClick={() => handleEnter(userInput)}
+                onClick={sendMessage}
                 disabled={isLoading}
                 variant="primary"
               >
