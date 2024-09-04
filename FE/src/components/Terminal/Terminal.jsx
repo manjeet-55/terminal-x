@@ -7,6 +7,8 @@ import Navbar from "../Navbar/Navbar";
 import { AiOutlineClose } from "react-icons/ai";
 import useTerminal from "./hooks/useTerminal";
 import "./Terminal.css";
+import { useDispatch } from "react-redux";
+import { addProcesses } from "../../../store/slices/processSlice";
 
 const TerminalComponent = () => {
   const [userInput, setUserInput] = useState("");
@@ -25,6 +27,7 @@ const TerminalComponent = () => {
     setTerminalOutputs
   } = useTerminal("ws://localhost:6060", "terminal");
 
+  const dispatch = useDispatch();
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
   };
@@ -48,12 +51,13 @@ const TerminalComponent = () => {
 
   const handleEnter = (command) => {
    
-      console.log(terminalOutputs[currentTerminal])
-      console.log(parseTerminalOutput(terminalOutputs[currentTerminal]))
+   const processes=   parseTerminalOutput(terminalOutputs[currentTerminal])
+   console.log("processes",processes)
+   dispatch(addProcesses(processes))
     if (currentTerminal !== null) {
       const formattedCommand = command;
       const message = JSON.stringify({
-        terminalId: currentTerminal,
+        terminalId: currentTerminal,  
         command: formattedCommand,
       });
 

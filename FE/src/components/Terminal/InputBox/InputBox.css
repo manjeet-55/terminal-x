@@ -13,6 +13,29 @@
   width: 1230px;
   height: auto; /* Add height if needed, otherwise the content height will be used */
 }
+/* Modal container styles */
+.modal-container {
+  max-height: 60vh; /* Adjust height as needed */
+  overflow-y: auto; /* Enables vertical scrolling */
+}
+
+/* Table styles */
+.table-container {
+  max-height: 400px; /* Adjust this value as needed */
+  overflow-y: auto; /* Enables vertical scrolling */
+}
+
+.table {
+  min-width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem; /* Adjust padding as needed */
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb; /* Light gray border for rows */
+}
 
   
   .input-box input {
