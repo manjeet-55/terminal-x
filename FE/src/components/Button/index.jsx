@@ -5,7 +5,7 @@ const Button = ({
   children,
   onClick,
   variant = "primary",
-  size = "sm",
+  size = "md",
   disabled = false,
   fullWidth = false,
   className = "",
@@ -35,8 +35,8 @@ const Button = ({
   };
 
   const sizeStyles = {
-    sm: "px-3 py-2 text-sm",
-    md: "px-4 py-3",
+    sm: "px-1 py-1 text-sm",
+    md: "px-2.5 py-1.5 text-sm",
     lg: "px-5 py-4 text-lg",
   };
 
@@ -46,9 +46,9 @@ const Button = ({
     <button
       onClick={onClick}
       className={clsx(
+        sizeStyles[size],
         baseStyles,
         variantStyles[variant],
-        sizeStyles[size],
         widthStyles,
         className,
         { "opacity-50 cursor-not-allowed": disabled }

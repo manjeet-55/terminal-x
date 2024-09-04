@@ -82,10 +82,7 @@ export default function RightSidebar() {
             onChange={(e) => setNewWorkspaceName(e.target.value)}
             className="p-2 bg-gray-900 border border-white rounded text-white outline-none"
           />
-          <Button
-            onClick={handleAddWorkspace}
-            variant="primary"
-          >
+          <Button onClick={handleAddWorkspace} variant="primary">
             Add
           </Button>
         </div>
@@ -94,21 +91,21 @@ export default function RightSidebar() {
         {workspaces.map((workspace, index) => (
           <div key={index} className="mb-4">
             {/* Workspace Header */}
-            
+
             <button
               onClick={() => handleWorkspaceClick(index)}
               className="w-full flex items-center justify-between p-2 bg-gray-900 text-white rounded transition text-lg"
             >
               <span>{workspace.name}</span>
               <div className="flex items-center gap-2">
-               
                 <Button
-                    onClick={() => handleDeleteWorkspaceAction(index)}
-                    variant="secondary"
-                  >
-                   <DeleteIcon />
+                  onClick={() => handleDeleteWorkspaceAction(index)}
+                  variant="secondary"
+                  size="sm"
+                >
+                  <DeleteIcon />
                 </Button>
-                
+
                 <KeyboardArrowDown
                   className={`transition-transform ${
                     openWorkspace === index ? "rotate-180" : ""
@@ -142,14 +139,13 @@ export default function RightSidebar() {
                       className="p-2 bg-gray-900 border border-white rounded text-white outline-none"
                     />
                   </div>
-                  
-                  <Button
-            onClick={() => handleAddCommandInWorkSpace(index)}
-            variant="primary"
-          >
-            <AddIcon />
 
-          </Button>
+                  <Button
+                    onClick={() => handleAddCommandInWorkSpace(index)}
+                    variant="primary"
+                  >
+                    <AddIcon />
+                  </Button>
                 </div>
 
                 {/* List of Commands */}
@@ -165,22 +161,23 @@ export default function RightSidebar() {
                         <span className="text-sm">{command.value}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                       
                         <Button
-                            onClick={() => handleCopyToClipboard(command.value)}
-                            variant="primary"
-                          >    
+                          onClick={() => handleCopyToClipboard(command.value)}
+                          variant="primary"
+                          size="sm"
+                        >
                           <ContentCopyIcon />
-
                         </Button>
-                        
+
                         <Button
-                            onClick={() =>
-                            handleDeleteCommand(index, commandIndex)}
-                            variant="secondary"
-                          >
-                           <DeleteIcon />
-                      </Button>
+                          onClick={() =>
+                            handleDeleteCommand(index, commandIndex)
+                          }
+                          size="sm"
+                          variant="secondary"
+                        >
+                          <DeleteIcon />
+                        </Button>
                       </div>
                     </div>
                   ))}
