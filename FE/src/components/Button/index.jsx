@@ -11,16 +11,16 @@ const Button = ({
   className = "",
 }) => {
   const baseStyles =
-    "font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-all duration-300 ease-in-out";
+    "font-semibold rounded-lg focus:outline-none transition-all duration-300 ease-in-out";
 
   const variantStyles = {
     primary: `
           bg-blue-600 text-white border border-transparent
-          hover:bg-transparent hover:border hover:border-blue-600 hover:text-blue-600
+          hover:bg-white/95 hover:border hover:border-blue-500 hover:text-blue-500
         `,
     secondary: `
           bg-red-500 text-white border border-transparent
-          hover:bg-transparent hover:border hover:border-red-500 hover:text-red-500
+          hover:bg-white/95 hover:border hover:border-red-500 hover:text-red-500
         `,
     outlinePrimary: `
           bg-transparent border-2 border-blue-600 text-blue-600 

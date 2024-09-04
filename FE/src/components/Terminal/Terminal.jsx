@@ -9,6 +9,7 @@ import ChatHistory from "../ChatHistory/index";
 import "./Terminal.css";
 import Button from "../Button";
 import Navbar from "../Navbar/Navbar";
+import { AiOutlineClose } from "react-icons/ai";
 
 const TerminalComponent = () => {
   const [userInput, setUserInput] = useState("");
@@ -75,13 +76,13 @@ const TerminalComponent = () => {
       rows: 20,
       cols: 80,
       fontSize: 14,
-      fontFamily: 'Monaco, monospace',
+      fontFamily: "Monaco, monospace",
       theme: {
-        background: '#1e1e1e',
-        foreground: '#dcdcdc',
+        background: "#1e1e1e",
+        foreground: "#dcdcdc",
       },
       allowProposedApi: true,
-      bellStyle: 'sound',
+      bellStyle: "sound",
       lineHeight: 1.5,
     });
 
@@ -194,12 +195,7 @@ const TerminalComponent = () => {
   // Function to send a sequence of commands to the current terminal
   const sendCommandsSequence = () => {
     if (currentTerminal !== null) {
-      const commands = [
-        'ls',
-        'cd Documents',
-        'mkdir NewFolder',
-        'ls -l',
-      ];
+      const commands = ["ls", "cd Documents", "mkdir NewFolder", "ls -l"];
 
       commands.forEach((command, index) => {
         setTimeout(() => {
@@ -235,10 +231,7 @@ const TerminalComponent = () => {
               >
                 Send
               </Button>
-              <Button
-                onClick={clearChat}
-                variant="secondary"
-              >
+              <Button onClick={clearChat} variant="secondary">
                 Clear
               </Button>
             </div>
@@ -248,44 +241,49 @@ const TerminalComponent = () => {
           </div>
         </div>
         <div className="flex flex-col items-center w-[70%]">
-          <div className="tabs-container flex flex-row gap-x-4 overflow-x-auto whitespace-nowrap">
-            <button
-              className="m-2 w-32 flex justify-center rounded-lg bg-gray-600 text-white hover:bg-gray-700 focus:outline-none text-lg font-[500] font-inter"
+          <div className="flex items-center h-8 gap-x-2">
+            <Button
+              variant="primary"
+              className="py-1 h-7 flex justify-center items-center rounded-lg bg-gray-600 text-white hover:bg-gray-800 hover:text-gray-100 hover:border-transparent"
               onClick={createTerminal}
             >
               New Tab
-            </button>
+            </Button>
+
             {terminals.map((terminal, index) => (
-              <div
+              <Button
                 key={index}
-                className={`m-2 w-24 p-1 flex justify-between rounded-lg text-lg font-[500] font-inter ${
+                className={`relative h-7 flex items-center justify-center gap-x-2 ${
                   currentTerminal === index ? "bg-blue-500" : "bg-gray-600"
-                } text-white hover:bg-blue-500 focus:outline-none`}
+                }`}
+                variant="primary"
                 onClick={(e) => {
                   e.stopPropagation();
                   switchTerminal(index);
                 }}
               >
-                <span> {index + 1}</span>
-                <span
-                  className="ml-2 cursor-pointer text-red-600"
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent triggering the parent click event
-                    closeTerminal(index);
-                  }}
-                >
-                  x
-                </span>
-              </div>
+                <span>Tab {index + 1}</span>
+                {index !== 0 && (
+                  <AiOutlineClose
+                    className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 cursor-pointer text-red-600"
+                    onClick={(e) => {
+                      e.stopPropagation(); 
+                      closeTerminal(index);
+                    }}
+                    size={16} 
+                  />
+                )}
+              </Button>
             ))}
           </div>
           {terminals.map((terminal, index) => (
             <div
               key={index}
               id={`terminal-${index}`}
-              className={`terminal-container w-full ${currentTerminal === index ? "" : "hidden"}`}
-            >
-            </div>
+              className={`terminal-container w-full ${
+                currentTerminal === index ? "" : "hidden"
+              }`}
+            ></div>
           ))}
           <InputBox onSend={handleEnter} />
         </div>
