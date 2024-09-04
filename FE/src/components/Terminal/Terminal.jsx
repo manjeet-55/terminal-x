@@ -21,13 +21,35 @@ const TerminalComponent = () => {
     sendToSocket,
     closeTerminal,
     setCurrentTerminal,
+    terminalOutputs,
+    setTerminalOutputs
   } = useTerminal("ws://localhost:6060", "terminal");
 
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
   };
 
+  const parseTerminalOutput = (output) => {
+    // Split the output into lines
+    const lines = output.trim().split("\n");
+  
+    // Extract header and rows
+    const header = lines[0].split(/\s+/).filter(Boolean);
+    const rows = lines.slice(1).map(line => {
+      const cells = line.split(/\s+/).filter(Boolean);
+      return header.reduce((acc, key, index) => {
+        acc[key] = cells[index] || "";
+        return acc;
+      }, {});
+    });
+  
+    return rows; // This will be an array of objects
+  };
+
   const handleEnter = (command) => {
+   
+      console.log(terminalOutputs[currentTerminal])
+      console.log(parseTerminalOutput(terminalOutputs[currentTerminal]))
     if (currentTerminal !== null) {
       const formattedCommand = command;
       const message = JSON.stringify({
@@ -44,6 +66,7 @@ const TerminalComponent = () => {
       setCommandHistory(newCommandHistory);
       localStorage.setItem("commandHistory", JSON.stringify(newCommandHistory));
     }
+    setTerminalOutputs([currentTerminal]);
   };
 
   const clearChat = () => {
@@ -136,7 +159,7 @@ const TerminalComponent = () => {
               }`}
             ></div>
           ))}
-          <InputBox onSend={handleEnter} />
+          <InputBox onSend={handleEnter}  />
         </div>
         <div className="w-[30%] bg-[#1f1514]">
           <Workspace />

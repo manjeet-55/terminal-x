@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import useSignIn from "./useSignIn";
 import Button from "../../components/Button";
 
-
 const SignIn = () => {
   const { handleSignIn } = useSignIn();
 
@@ -13,6 +12,7 @@ const SignIn = () => {
     password: "",
   });
   return (
+
     <div className="bg-gray-900 flex items-center justify-center min-h-screen">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-bold text-white mb-6 text-center">
