@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-import './InputBox.css'; // Use a separate CSS file for styling
+import './InputBox.css'; // Import the CSS file with the scrollable styles
 import Button from '../../Button';
+import { useSelector } from 'react-redux';
 
 const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
   const inputRef = useRef(null);
@@ -8,8 +9,9 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
   const [showModal, setShowModal] = useState(false);
   const recognitionRef = useRef(null);
 
+  const { processes } = useSelector((state) => state.process);
+
   useEffect(() => {
-    // Initialize SpeechRecognition
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       recognitionRef.current = 'SpeechRecognition' in window
         ? new SpeechRecognition()
@@ -33,7 +35,6 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
 
       recognitionRef.current.onend = () => {
         setIsListening(false);
-        // Automatically execute the command after stopping
         if (inputRef.current && onSend) {
           onSend(inputRef.current.value, currentTerminal);
           inputRef.current.value = ''; // Clear input after sending
@@ -86,13 +87,10 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
 
   const handleProcessClick = () => {
     if (onSend) {
-      // Execute the command
       onSend('ps -a', currentTerminal);
-
-      // Display the modal after a delay
       setTimeout(() => {
         setShowModal(true);
-      }, 1000); // 1-second delay
+      }, 1000);
     }
   };
 
@@ -110,10 +108,7 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
         aria-label="Command input box"
       />
 
-      <Button
-        onClick={handleProcessClick}
-        variant="primary"
-      >
+      <Button onClick={handleProcessClick} variant="primary">
         Process
       </Button>
 
@@ -130,52 +125,44 @@ const InputBox = ({ onSend, currentTerminal, commandOutput = [] }) => {
         {isListening ? 'Stop' : 'Mic'}
       </Button>
 
-      {/* Modal for displaying the command output */}
       {showModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white p-4 rounded-lg shadow-lg max-w-2xl w-full">
             <h2 className="text-xl font-bold mb-4">Running Processes</h2>
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Process ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Port
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Details
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {commandOutput.map((process, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {process.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {process.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {process.port}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {process.details}
-                    </td>
+            <div className="table-container">
+              <table className="table">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      PID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      TTY
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Details
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {processes.slice(0, 10).map((process, index) => (
+                    <tr key={index}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {process.ps}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {process["-a"]}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {process["-a"]?.includes('tty') ? 'Terminal' : 'Other'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-            <Button
-              onClick={closeModal}
-              variant="secondary"
-            >
+            <Button onClick={closeModal} variant="secondary">
               Close
             </Button>
           </div>
